@@ -59,3 +59,4 @@ if __name__ == '__main__':
     # save the figure to a file
     print(normal_mixture(np.linspace(-5, 5, 5), [0.5, 0.25, 1], [0, 1, 1.5], [1/3, 1/3, 1/3]))
     print(normal_mixture(np.linspace(-2, 2, 4), [0.5], [0], [1]))
+    print(normal_mixture(np.linspace(-3, 4, 4), [0.5], [0], [1]))
