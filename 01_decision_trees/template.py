@@ -166,9 +166,23 @@ class IrisTreeTrainer:
         # thangad til tek allt i einu
         # fit tree i hvert skipti
         # finna accuracy i hvert skipti
+        
+        # EDA, taka random indices i hvert skipti (til ad nota ef gogn eru ekki randomly rodud upp)
+        # s.s. velja fyrst 1 random feature, fitta, svo 2 random feature , fitta o.s.frv.
+        # replace = False svo sama feature er ekki tekid oftar en einu sinni (i np.random.choice)
+        # ahugaverdur munur a ad nota random indices vs ekki random (sja plots)
+        # hradar ad laera af faum samples med random!
+        
         for i in range(num_train_samples):
+            ######## nota ef gogn eru ekki randomly rodud upp ##############
+            #random_indices = np.random.choice(num_train_samples, i+1, replace=False)
+            #self.tree = self.tree.fit(self.train_features[random_indices], self.train_targets[random_indices])
+            # ------------------------------------------------------------------------------------------------ #
+
             self.tree.fit(self.train_features[:(i+1)], self.train_targets[:(i+1)])
+            
             accuracies[i]=self.accuracy()
+        
         plt.plot(np.arange(num_train_samples),accuracies)
         plt.xlabel('Number of training samples')
         plt.ylabel('Accuracy')
