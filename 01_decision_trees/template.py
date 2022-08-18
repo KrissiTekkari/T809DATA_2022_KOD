@@ -144,7 +144,8 @@ class IrisTreeTrainer:
 
     def accuracy(self):
         # check model on test data
-        target_prediction = self.tree.predict(self.test_features)
+        #target_prediction = self.tree.predict(self.test_features)
+        target_prediction = self.guess()
         array_true_if_correct_prediction = target_prediction == self.test_targets
         # True er 1, False er 0, telja nonzeros i predictions, deila med heildarfjolda predictions
         return np.count_nonzero(array_true_if_correct_prediction)/len(target_prediction)
@@ -156,13 +157,38 @@ class IrisTreeTrainer:
     def plot_progress(self):
         # Independent section
         # Remove this method if you don't go for independent section.
-        ...
+
+        num_train_samples = len(self.train_features)
+        # accuracy sem fer a y-as
+        accuracies = [0]*num_train_samples
+        # iterate through training features and targets
+        # tek fyrst bara 1 (efsta), svo 2 (efstu), svo 3......
+        # thangad til tek allt i einu
+        # fit tree i hvert skipti
+        # finna accuracy i hvert skipti
+        for i in range(num_train_samples):
+            self.tree.fit(self.train_features[:(i+1)], self.train_targets[:(i+1)])
+            accuracies[i]=self.accuracy()
+        plt.plot(np.arange(num_train_samples),accuracies)
+        plt.xlabel('Number of training samples')
+        plt.ylabel('Accuracy')
+        plt.show()
+            
 
     def guess(self):
-        ...
+        return self.tree.predict(self.test_features)
 
     def confusion_matrix(self):
-        ...
+        # sett upp eins og i wikipedia greininni
+        # https://en.wikipedia.org/wiki/Confusion_matrix
+        # predicted values eru linur fylkis
+        # actual values eru dalkar fylkis
+        # svo hvert stak i fylki er [actual, predicted]
+        target_prediction = self.tree.predict(self.test_features)
+        conf_matrix = np.zeros((3, 3))
+        for i in range(len(target_prediction)):
+            conf_matrix[self.test_targets[i], target_prediction[i]] += 1
+        return conf_matrix
 
 if __name__ == '__main__':
     # select your function to test here and do `python3 template.py`
@@ -178,7 +204,9 @@ if __name__ == '__main__':
     #print(weighted_impurity(t_1, t_2, classes))
     #print(total_gini_impurity(features, targets, classes, 2, 4.65))
     #print(brute_best_split(features, targets, classes, 30))
-    dt = IrisTreeTrainer(features, targets, classes=classes)
+    dt = IrisTreeTrainer(features, targets, classes=classes, train_ratio=0.6)
     dt.train()
-    print(dt.accuracy())
-    dt.plot()
+    #print(dt.accuracy())
+    #print(dt.guess())
+    #print(dt.confusion_matrix())
+    dt.plot_progress()
