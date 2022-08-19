@@ -79,6 +79,7 @@ if __name__ == '__main__':
     # save the figure to a file
     #print(normal_mixture(np.linspace(-5, 5, 5), [0.5, 0.25, 1], [0, 1, 1.5], [1/3, 1/3, 1/3]))
     #print(normal_mixture(np.linspace(-2, 2, 4), [0.5], [0], [1]))
+    print(normal(0, 1, 0))
     np.random.seed(0)
     #sample_gaussian_mixture([0.3, 0.5, 1.0], [0, -1, 1.5], [0.2, 0.3, 0.5], 10)
     plt.subplot(141)

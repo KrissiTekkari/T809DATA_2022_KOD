@@ -1,7 +1,7 @@
 # Author: Kristjan Orri Dadason
 # Date:
 # Project: 
-# Acknowledgements: 
+# Acknowledgements: plot points fra kennarar
 #
 
 import numpy as np
@@ -122,7 +122,15 @@ def best_k(
     point_targets: np.ndarray,
     classes: list,
 ) -> int:
-    ...
+    predic_acc = 0
+    best_k = 0
+    for i in range(len(points)-1):
+        temp_predic_acc = knn_accuracy(points, point_targets, classes, i+1)
+        if temp_predic_acc > predic_acc:
+            predic_acc = temp_predic_acc
+            best_k = i+1
+    return best_k
+
 
 
 def knn_plot_points(
@@ -131,7 +139,18 @@ def knn_plot_points(
     classes: list,
     k: int
 ):
-    ...
+    colors = ['yellow', 'purple', 'blue']
+    target_prediction = knn_predict(points, point_targets, classes, k)
+    for i in range(points.shape[0]):
+        [x, y] = points[i,:2]
+        if target_prediction[i] == point_targets[i]:
+            plt.scatter(x, y, c=colors[point_targets[i]], edgecolors='green',
+                linewidths=2)
+        else:
+            plt.scatter(x, y, c=colors[point_targets[i]], edgecolors='red',
+                linewidths=2)
+    plt.title('Yellow=0, Purple=1, Blue=2')
+    plt.show()
 
 
 def weighted_vote(
@@ -144,7 +163,20 @@ def weighted_vote(
     popular
     '''
     # Remove if you don't go for independent section
-    ...
+    nearby_vigrar = np.zeros((len(classes),len(targets)))
+    c_j = np.zeros(len(distances))
+    for i in range(len(targets)):
+        nearby_vigrar[targets[i],i] = 1
+        # ef tvo features eru eins that kemur divide by zero error
+        c_j[i] = 1/distances[i]
+        
+    
+    c_j = (c_j/np.sum(c_j)).reshape(-1,1)
+    check = nearby_vigrar@c_j
+    check = np.sum(check, axis=1)
+
+    return np.argmax(check)
+
 
 
 def wknn(
@@ -157,7 +189,10 @@ def wknn(
     '''
     Combine k_nearest and vote
     '''
-    # Remove if you don't go for independent section
+    k_nearest_points = k_nearest(x, points, k)
+    nearest_targets_to_point = point_targets[k_nearest_points]
+    nearest_distances_to_point = euclidian_distances(x, points[k_nearest_points])
+    return weighted_vote(nearest_targets_to_point, nearest_distances_to_point, classes)
     ...
 
 
@@ -168,7 +203,14 @@ def wknn_predict(
     k: int
 ) -> np.ndarray:
     # Remove if you don't go for independent section
-    ...
+    prediction_listi = [0]*points.shape[0]
+    
+    for i in range(points.shape[0]):
+        temp_points, temp_point_targets = remove_one(points, i), remove_one(point_targets, i)
+        temp_prediction = wknn(points[i], temp_points, temp_point_targets, classes, k)
+        prediction_listi[i] = temp_prediction
+        
+    return prediction_listi
 
 
 def compare_knns(
@@ -176,17 +218,32 @@ def compare_knns(
     targets: np.ndarray,
     classes: list
 ):
-    # Remove if you don't go for independent section
-    ...
+    knn_acc_array = np.zeros(len(points))
+    wknn_acc_array = np.zeros(len(points))
+    for i in range(len(points)):
+        knn_target_prediction = knn_predict(points,targets,classes,i+1)
+        wknn_target_prediction = wknn_predict(points,targets,classes,i+1)
+        knn_array_true_if_correct_prediction = knn_target_prediction == targets
+        wknn_array_true_if_correct_prediction = wknn_target_prediction == targets
+        # True er 1, False er 0, telja nonzeros i predictions, deila med heildarfjolda predictions
+        knn_acc_array[i] = np.count_nonzero(knn_array_true_if_correct_prediction)/len(knn_target_prediction)
+        wknn_acc_array[i] = np.count_nonzero(wknn_array_true_if_correct_prediction)/len(wknn_target_prediction)
+    
+    plt.plot(np.arange(len(points)),knn_acc_array, label='knn')
+    plt.plot(np.arange(len(points)),wknn_acc_array, label='wknn')
+    plt.legend()
+    plt.xlabel('k')
+    plt.ylabel('accuracy')
+    plt.show()
 
 if __name__ == '__main__':
     # select your function to test here and do `python3 template.py`
     
     ## part 1
     
-    #d, t, classes = load_iris()
-    #x, points = d[0,:], d[1:, :]
-    #x_target, point_targets = t[0], t[1:]
+    d, t, classes = load_iris()
+    x, points = d[0,:], d[1:, :]
+    x_target, point_targets = t[0], t[1:]
     #print(euclidian_distance(x, points[0]))
     #print(euclidian_distance(x, points[50]))
     #print(euclidian_distances(x, points))
@@ -209,8 +266,34 @@ if __name__ == '__main__':
     #print(predictions2)
     #print(knn_accuracy(d_test, t_test, classes, 10))
     #print(knn_accuracy(d_test, t_test, classes, 5))
-    print(knn_confusion_matrix(d_test, t_test, classes, 10))
-    print(knn_confusion_matrix(d_test, t_test, classes, 20))
+    #print(knn_confusion_matrix(d_test, t_test, classes, 10))
+    #print(knn_confusion_matrix(d_test, t_test, classes, 20))
+    #print(best_k(d_train, t_train, classes))
+    #knn_plot_points(d, t, classes, 3)
 
+    # independent part
+    #foo = k_nearest(x, points, 3)
+    #print(point_targets[foo])
+    #print(euclidian_distances(x, points)[foo])
+    #print(weighted_vote(point_targets[foo], euclidian_distances(x, points)[foo], classes))
+    #print(knn(x, points, point_targets, classes, 15))
+    #print(wknn(x, points, point_targets, classes, 15))
+    #predictions1 = knn_predict(d_test, t_test, classes, 10)
+    #print(predictions1)
+    #predictions1w = wknn_predict(d_test, t_test, classes, 10)
+    #print(predictions1w)
+    compare_knns(d_test, t_test, classes)
+
+    # B. Theoretical
+
+    # knn telur alla punkta sem jafn mikilvaega
+    # svo thegar punktarnir sem eru langt i burtu eru taldir
+    # med i k_nearest, tha ruglar thad reikniritid
+
+    # hinsvegar thegar k haekkar tha naer weighted knn ad eyda 
+    # "sudinu" fra punktunum sem eru fjaer. Thad gerist einmitt
+    # af thvi ad 1/distance verdur svo litil tala og targets
+    # langt i burtu detta i rauninni út.
+    
     
     
