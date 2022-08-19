@@ -197,7 +197,7 @@ class IrisTreeTrainer:
         # https://en.wikipedia.org/wiki/Confusion_matrix
         # predicted values eru linur fylkis
         # actual values eru dalkar fylkis
-        # svo hvert stak i fylki er [actual, predicted]
+        # svo hvert stak i fylki er [predicted, actual]
         target_prediction = self.tree.predict(self.test_features)
         conf_matrix = np.zeros((len(self.classes), len(self.classes)))
         for i in range(len(target_prediction)):

@@ -109,7 +109,7 @@ def knn_confusion_matrix(
     # https://en.wikipedia.org/wiki/Confusion_matrix
     # predicted values eru linur fylkis
     # actual values eru dalkar fylkis
-    # svo hvert stak i fylki er [actual, predicted]
+    # svo hvert stak i fylki er [predicted, actual]
     target_prediction = knn_predict(points,point_targets,classes,k)
     conf_matrix = np.zeros((len(classes), len(classes)))
     for i in range(len(target_prediction)):
