@@ -193,13 +193,13 @@ class IrisTreeTrainer:
         return self.tree.predict(self.test_features)
 
     def confusion_matrix(self):
-        # sett upp eins og i wikipedia greininni
+        # sett upp eins og glaerum
         # https://en.wikipedia.org/wiki/Confusion_matrix
         # predicted values eru linur fylkis
         # actual values eru dalkar fylkis
         # svo hvert stak i fylki er [actual, predicted]
         target_prediction = self.tree.predict(self.test_features)
-        conf_matrix = np.zeros((3, 3))
+        conf_matrix = np.zeros((len(self.classes), len(self.classes)))
         for i in range(len(target_prediction)):
             conf_matrix[self.test_targets[i], target_prediction[i]] += 1
         return conf_matrix
