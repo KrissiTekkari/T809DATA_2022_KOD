@@ -1,8 +1,8 @@
 # Author: Kristjan Orri Dadason
-# Date:
-# Project: 
+# Date: 19/08/2022
+# Project: 02_nearest_neighbours
 # Acknowledgements: plot points fra kennarar
-#
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -235,65 +235,3 @@ def compare_knns(
     plt.xlabel('k')
     plt.ylabel('accuracy')
     plt.show()
-
-if __name__ == '__main__':
-    # select your function to test here and do `python3 template.py`
-    
-    ## part 1
-    
-    d, t, classes = load_iris()
-    x, points = d[0,:], d[1:, :]
-    x_target, point_targets = t[0], t[1:]
-    #print(euclidian_distance(x, points[0]))
-    #print(euclidian_distance(x, points[50]))
-    #print(euclidian_distances(x, points))
-    #print(k_nearest(x, points, 3))
-    #print(vote(np.array([0,0,1,2]), np.array([0,1,2])))
-    #print(vote(np.array([1,1,1,1]), np.array([0,1])))
-    
-    #print(x_target)
-    #print(knn(x, points, point_targets, classes, 1))
-    #print(knn(x, points, point_targets, classes, 15))
-    #print(knn(x, points, point_targets, classes, 150))
-    
-    ## part 2
-    
-    d, t, classes = load_iris()
-    (d_train, t_train), (d_test, t_test) = split_train_test(d, t, train_ratio=0.8)
-    #predictions1 = knn_predict(d_test, t_test, classes, 10)
-    #print(predictions1)
-    #predictions2 = knn_predict(d_test, t_test, classes, 5)
-    #print(predictions2)
-    #print(knn_accuracy(d_test, t_test, classes, 10))
-    #print(knn_accuracy(d_test, t_test, classes, 5))
-    #print(knn_confusion_matrix(d_test, t_test, classes, 10))
-    #print(knn_confusion_matrix(d_test, t_test, classes, 20))
-    #print(best_k(d_train, t_train, classes))
-    #knn_plot_points(d, t, classes, 3)
-
-    # independent part
-    #foo = k_nearest(x, points, 3)
-    #print(point_targets[foo])
-    #print(euclidian_distances(x, points)[foo])
-    #print(weighted_vote(point_targets[foo], euclidian_distances(x, points)[foo], classes))
-    #print(knn(x, points, point_targets, classes, 15))
-    #print(wknn(x, points, point_targets, classes, 15))
-    #predictions1 = knn_predict(d_test, t_test, classes, 10)
-    #print(predictions1)
-    #predictions1w = wknn_predict(d_test, t_test, classes, 10)
-    #print(predictions1w)
-    compare_knns(d_test, t_test, classes)
-
-    # B. Theoretical
-
-    # knn telur alla punkta sem jafn mikilvaega
-    # svo thegar punktarnir sem eru langt i burtu eru taldir
-    # med i k_nearest, tha ruglar thad reikniritid
-
-    # hinsvegar thegar k haekkar tha naer weighted knn ad eyda 
-    # "sudinu" fra punktunum sem eru fjaer. Thad gerist einmitt
-    # af thvi ad 1/distance verdur svo litil tala og targets
-    # langt i burtu detta i rauninni út.
-    
-    
-    

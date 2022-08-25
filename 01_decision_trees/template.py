@@ -1,9 +1,7 @@
 # Author: Kristjan Orri Dadason
-# Date:
-# Project: 
+# Date: 16/08/2022
+# Project: 02_nearest_neighbours
 # Acknowledgements: 
-#
-
 
 from typing import Union
 import matplotlib.pyplot as plt
@@ -203,24 +201,3 @@ class IrisTreeTrainer:
         for i in range(len(target_prediction)):
             conf_matrix[self.test_targets[i], target_prediction[i]] += 1
         return conf_matrix
-
-if __name__ == '__main__':
-    # select your function to test here and do `python3 template.py`
-    #print(prior([0, 0, 1], [0, 1]))
-    #print(prior([0, 2, 3, 3], [0, 1, 2, 3]))
-    #split_feature_index = 2
-    #theta = 4.65
-    features, targets, classes = load_iris()
-    #(f_1, t_1), (f_2, t_2) = split_data(features, targets, split_feature_index, theta)
-    #print(f_1.shape, f_2.shape)
-    #print(gini_impurity(t_1, classes))
-    #print(gini_impurity(t_2, classes))
-    #print(weighted_impurity(t_1, t_2, classes))
-    #print(total_gini_impurity(features, targets, classes, 2, 4.65))
-    #print(brute_best_split(features, targets, classes, 30))
-    dt = IrisTreeTrainer(features, targets, classes=classes, train_ratio=0.6)
-    dt.train()
-    #print(dt.accuracy())
-    #print(dt.guess())
-    #print(dt.confusion_matrix())
-    dt.plot_progress()
