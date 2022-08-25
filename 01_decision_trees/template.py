@@ -1,6 +1,6 @@
 # Author: Kristjan Orri Dadason
 # Date: 16/08/2022
-# Project: 02_nearest_neighbours
+# Project: 01_nearest_neighbours
 # Acknowledgements: 
 
 from typing import Union
