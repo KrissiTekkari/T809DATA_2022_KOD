@@ -235,3 +235,15 @@ def compare_knns(
     plt.xlabel('k')
     plt.ylabel('accuracy')
     plt.show()
+
+
+""" B. Theoretical
+
+knn telur alla punkta sem jafn mikilvaega
+svo thegar punktarnir sem eru langt i burtu eru taldir
+med i k_nearest, tha ruglar thad reikniritid
+
+hinsvegar thegar k haekkar tha naer weighted knn ad eyda 
+"sudinu" fra punktunum sem eru fjaer. Thad gerist einmitt
+af thvi ad 1/distance verdur svo litil tala og targets
+langt i burtu detta i rauninni út. """
