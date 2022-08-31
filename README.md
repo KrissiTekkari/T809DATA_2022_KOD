@@ -4,10 +4,12 @@ This repository contains exercises and supporting code for the course T-809-DATA
 
 
 ## Modules
-The repository contains the followorkng modules:
+The repository contains the following modules:
 * Assignment 0: [Introduction](00_introduction/README.md)
 * Assignment 1: [Decision Trees](01_decision_trees/README.md)
 * Assignment 2: [K-Nearest Neighbors](02_nearest_neighbours/README.md)
+* Assignment 3: [Sequential Estimation](03_sequential_estimation/README.md)
+* Assignment 4: [Classification Based on Probability](04_classification/README.md)
 
 We will add modules gradually throughout the course.
 
