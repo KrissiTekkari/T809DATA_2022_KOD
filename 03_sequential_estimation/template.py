@@ -20,7 +20,8 @@ def gen_data(
     '''Generate n values samples from the k-variate
     normal distribution
     '''
-    ...
+    I_k = np.eye(k)
+    return np.random.multivariate_normal(mean, (var**2)*I_k, n)
 
 
 def update_sequence_mean(
@@ -68,3 +69,10 @@ def gen_changing_data(
 def _plot_changing_sequence_estimate():
     # remove this if you don't go for the independent section
     ...
+
+# main function
+if __name__ == '__main__':
+    np.random.seed(1234)
+    print(gen_data(2, 3, np.array([0, 1, -1]), 1.3))
+    np.random.seed(1234)
+    print(gen_data(5, 1, np.array([0.5]), 0.5))
