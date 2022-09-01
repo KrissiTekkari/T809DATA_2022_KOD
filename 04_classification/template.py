@@ -21,7 +21,7 @@ def mean_of_class(
     Estimate the mean of a selected class given all features
     and targets in a dataset
     '''
-    ...
+    return np.mean(features[targets==selected_class], axis=0)
 
 
 def covar_of_class(
@@ -33,7 +33,7 @@ def covar_of_class(
     Estimate the covariance of a selected class given all
     features and targets in a dataset
     '''
-    ...
+    return np.cov(features[targets==selected_class],rowvar=False)
 
 
 def likelihood_of_class(
@@ -101,3 +101,10 @@ def maximum_aposteriori(
     array
     '''
     ...
+
+if __name__ == '__main__':
+    features, targets, classes = load_iris()
+    (train_features, train_targets), (test_features, test_targets)\
+    = split_train_test(features, targets, train_ratio=0.6)
+    print(mean_of_class(train_features, train_targets, 0))
+    print(covar_of_class(train_features, train_targets, 0))
