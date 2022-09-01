@@ -73,12 +73,53 @@ def gen_changing_data(
     var: float
 ) -> np.ndarray:
     # remove this if you don't go for the independent section
-    ...
+    I_k = np.eye(k)
+    changing_data_array = np.zeros((n, k))
+    for i in range(n):
+        changing_data_array[i] = np.random.multivariate_normal(start_mean, (var**2)*I_k)
+        start_mean = start_mean + (end_mean - start_mean)/n	
+    return changing_data_array
 
 
 def _plot_changing_sequence_estimate():
+    def update_sequence_changing_mean(
+        mu: np.ndarray,
+        x: np.ndarray,
+        n: int
+    ) -> np.ndarray:
+        '''Performs the mean sequence estimation update on a changing mean
+        '''
+        delta = x - mu
+        u = delta/n  
+        return mu + u
+    
+    def _plot_changing_mean_square_error(data,estimates,start_mean,end_mean):
+        # plot mean square error between estimate and actual mean
+        actual_mean = start_mean
+        SE = []
+        for i in range(data.shape[0]):
+            SE.append(_square_error(actual_mean, estimates[i]))
+            actual_mean =  actual_mean + (end_mean -  actual_mean)/data.shape[0]
+        plt.plot(SE)
+        plt.show()
     # remove this if you don't go for the independent section
-    ...
+    N = 500
+    start_mean = np.array([0, 1, -1])
+    end_mean = np.array([1, -1, 0])
+    last_estimated_mean = start_mean
+    data = gen_changing_data(N, 3, start_mean, end_mean, np.sqrt(3))
+    estimates = [np.array([0, 0, 0])]
+    for i in range(data.shape[0]):
+        update = update_sequence_changing_mean(estimates[-1], data[i], i+1)
+        last_estimated_mean = update
+        estimates.append(update)
+    plt.plot([e[0] for e in estimates], label='First dimension')
+    plt.plot([e[1] for e in estimates], label='Second dimension')
+    plt.plot([e[2] for e in estimates], label='Third dimension')
+    plt.legend(loc='upper center')
+    plt.grid()
+    plt.show()
+    _plot_changing_mean_square_error(data,estimates,start_mean,end_mean)
 
 # main function
 if __name__ == '__main__':
@@ -100,4 +141,10 @@ if __name__ == '__main__':
     #_plot_sequence_estimate()
     #_plot_mean_square_error()
     # independent section
-    print('lol')
+    #print('lol')
+    #Y = gen_changing_data(500, 3, np.array([0, 1, -1]), np.array([1, -1, 0]), np.sqrt(3))
+    #scatter_3d_data(Y)
+    #bar_per_axis(Y)
+    _plot_changing_sequence_estimate()
+
+    
