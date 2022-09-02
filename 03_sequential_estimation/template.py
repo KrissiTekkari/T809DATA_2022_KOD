@@ -124,8 +124,8 @@ def _plot_changing_sequence_estimate():
 # main function
 if __name__ == '__main__':
     # 1.1
-    #np.random.seed(1234)
-    #print(gen_data(2, 3, np.array([0, 1, -1]), 1.3))
+    np.random.seed(1234)
+    print(gen_data(2, 3, np.array([0, 1, -1]), 1.3))
     #np.random.seed(1234)
     #print(gen_data(5, 1, np.array([0.5]), 0.5))
     # 1.2
