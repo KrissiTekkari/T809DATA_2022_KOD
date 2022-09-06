@@ -85,13 +85,20 @@ def _plot_changing_sequence_estimate():
     def update_sequence_changing_mean(
         mu: np.ndarray,
         x: np.ndarray,
-        n: int
+        n: int,
+        lam: float,
+        step: float
     ) -> np.ndarray:
         '''Performs the mean sequence estimation update on a changing mean
         '''
-        delta = x - mu
-        u = delta/n  
-        return mu + u
+        mu_nytt = 0
+        total_lam = 0
+        for i in range(n):
+            L = lam**(n-(i+1))
+            mu_nytt += (L)*x[i]
+            total_lam += L
+        #mu_nytt = mu_nytt + step*(x[-1] - mu_nytt)
+        return mu_nytt/total_lam
     
     def _plot_changing_mean_square_error(data,estimates,start_mean,end_mean):
         # plot mean square error between estimate and actual mean
@@ -101,6 +108,7 @@ def _plot_changing_sequence_estimate():
             SE.append(_square_error(actual_mean, estimates[i]))
             actual_mean =  actual_mean + (end_mean -  actual_mean)/data.shape[0]
         plt.plot(SE)
+        print(np.sum(SE))
         plt.show()
     # remove this if you don't go for the independent section
     N = 500
@@ -110,7 +118,8 @@ def _plot_changing_sequence_estimate():
     data = gen_changing_data(N, 3, start_mean, end_mean, np.sqrt(3))
     estimates = [np.array([0, 0, 0])]
     for i in range(data.shape[0]):
-        update = update_sequence_changing_mean(estimates[-1], data[i], i+1)
+        #update = update_sequence_changing_mean(estimates[-1], data[i], i+1)
+        update = update_sequence_changing_mean(estimates, data[:i+1], np.shape(estimates)[0], lam=0.3, step=0.3)
         last_estimated_mean = update
         estimates.append(update)
     plt.plot([e[0] for e in estimates], label='First dimension')
