@@ -204,11 +204,15 @@ if __name__ == '__main__':
     print(likelihoods_max_like[-1,:])
     print(likelihoods_max_aposteriori[-1,:])
 
-    print(np.sum(predict(likelihoods_max_like)==test_targets)/len(test_targets))
-    print(np.sum(predict(likelihoods_max_aposteriori)==test_targets)/len(test_targets))
+    max_lik=np.sum(predict(likelihoods_max_like)==test_targets)/len(test_targets)
+    max_apost=np.sum(predict(likelihoods_max_aposteriori)==test_targets)/len(test_targets)
+    print(f'maximum likelihood accuracy: {max_lik}')
+    print(f'maximum a posteriori accuracy: {max_apost}')
 
     # compute confusion matrix
+    print('The confusion matrix for maximum likelihood is:')
     print(confusion_matrix(predict(likelihoods_max_like), test_targets, classes))
+    print('The confusion matrix for maximum a posteriori is:')
     print(confusion_matrix(predict(likelihoods_max_aposteriori), test_targets, classes))
 
     print(features.shape)
