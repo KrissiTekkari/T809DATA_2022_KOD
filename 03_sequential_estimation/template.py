@@ -5,6 +5,7 @@
 #
 
 
+from cmath import inf
 from tools import scatter_3d_data, bar_per_axis
 
 import matplotlib.pyplot as plt
@@ -85,11 +86,11 @@ def _plot_changing_sequence_estimate():
     def update_sequence_changing_mean(
         mu: np.ndarray,
         x: np.ndarray,
-        n: int
+        alpha: int
     ) -> np.ndarray:
         '''Performs the mean sequence estimation update on a changing mean
         '''
-        return mu + (x - mu)/n
+        return mu + (x - mu)*alpha
     
     def _plot_changing_mean_square_error(data,estimates,start_mean,end_mean):
         # plot mean square error between estimate and actual mean
@@ -101,28 +102,57 @@ def _plot_changing_sequence_estimate():
         plt.plot(SE)
         print(np.sum(SE))
         plt.show()
+        
+    def sum_mean_square_error(data,estimates,start_mean,end_mean):
+        # plot mean square error between estimate and actual mean
+        actual_mean = start_mean
+        SE = []
+        for i in range(data.shape[0]):
+            SE.append(_square_error(actual_mean, estimates[i]))
+            actual_mean =  actual_mean + (end_mean -  actual_mean)/data.shape[0]
+        return np.sum(SE)
     # remove this if you don't go for the independent section
     N = 500
     start_mean = np.array([0, 1, -1])
     end_mean = np.array([1, -1, 0])
-    last_estimated_mean = start_mean
     data = gen_changing_data(N, 3, start_mean, end_mean, np.sqrt(3))
-    estimates = [np.array([0, 0, 0])]
+    """ estimates = [np.array([0, 0, 0])]
     for i in range(data.shape[0]):
-        update = update_sequence_changing_mean(estimates[-1], data[i], i+1)
-        estimates.append(update)
-    plt.plot([e[0] for e in estimates], label='First dimension')
-    plt.plot([e[1] for e in estimates], label='Second dimension')
-    plt.plot([e[2] for e in estimates], label='Third dimension')
+        update = update_sequence_mean(estimates[-1], data[i], i+1)
+        estimates.append(update) """
+    # find alpha that minimizes the sum of mean square error
+    best_alpha = 0
+    best_MSE = inf
+    best_estimates = []
+    # try alphas from 0 to 1 with 0.005 step size
+    for alpha in np.linspace(0,1,200):
+        estimates = [np.array([0, 0, 0])]
+        for i in range(data.shape[0]):
+            update = update_sequence_changing_mean(estimates[-1], data[i], alpha)
+            estimates.append(update)
+        MSE = sum_mean_square_error(data,estimates,start_mean,end_mean)
+        #print(alpha,MSE)
+        if MSE < best_MSE:
+            best_MSE = MSE
+            best_alpha = alpha
+            best_estimates = estimates
+    print(best_alpha,best_MSE)
+    plt.plot([e[0] for e in best_estimates], label='First dimension', color='blue')
+    plt.plot([e[1] for e in best_estimates], label='Second dimension', color='red')
+    plt.plot([e[2] for e in best_estimates], label='Third dimension', color='green')
+    # plot lines that start from the start mean and end at the end mean
+    plt.plot([start_mean[0] + (end_mean[0] - start_mean[0])/N*i for i in range(N)], color='blue', linestyle='dashed')
+    plt.plot([start_mean[1] + (end_mean[1] - start_mean[1])/N*i for i in range(N)], color='red', linestyle='dashed')
+    plt.plot([start_mean[2] + (end_mean[2] - start_mean[2])/N*i for i in range(N)], color='green', linestyle='dashed')
     plt.legend(loc='upper center')
     plt.grid()
     plt.show()
-    _plot_changing_mean_square_error(data,estimates,start_mean,end_mean)
+    _plot_changing_mean_square_error(data,best_estimates,start_mean,end_mean)
 
 # main function
 if __name__ == '__main__':
     # 1.1
-    np.random.seed(1234)
+    #np.random.seed(1234)
     print(gen_data(2, 3, np.array([0, 1, -1]), 1.3))
     #np.random.seed(1234)
     #print(gen_data(5, 1, np.array([0.5]), 0.5))
