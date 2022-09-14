@@ -104,7 +104,7 @@ def _plot_changing_sequence_estimate():
         plt.show()
         
     def sum_mean_square_error(data,estimates,start_mean,end_mean):
-        # plot mean square error between estimate and actual mean
+        # return sum of mean square error between estimate and actual mean over all dimensions
         actual_mean = start_mean
         SE = []
         for i in range(data.shape[0]):
@@ -149,30 +149,5 @@ def _plot_changing_sequence_estimate():
     plt.show()
     _plot_changing_mean_square_error(data,best_estimates,start_mean,end_mean)
 
-# main function
-if __name__ == '__main__':
-    # 1.1
-    #np.random.seed(1234)
-    print(gen_data(2, 3, np.array([0, 1, -1]), 1.3))
-    #np.random.seed(1234)
-    #print(gen_data(5, 1, np.array([0.5]), 0.5))
-    # 1.2
-    #np.random.seed(1234)
-    #X = gen_data(300, 3, np.array([0, 1, -1]), np.sqrt(3))
-    #scatter_3d_data(X)
-    #bar_per_axis(X)
-    # 1.4
-    #mean = np.mean(X, 0)
-    #new_x = gen_data(1, 3, np.array([0, 0, 0]), 1)
-    #print(update_sequence_mean(mean, new_x, X.shape[0]))
-    # 1.5
-    #_plot_sequence_estimate()
-    #_plot_mean_square_error()
-    # independent section
-    #print('lol')
-    #Y = gen_changing_data(500, 3, np.array([0, 1, -1]), np.array([1, -1, 0]), np.sqrt(3))
-    #scatter_3d_data(Y)
-    #bar_per_axis(Y)
-    _plot_changing_sequence_estimate()
 
     
