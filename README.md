@@ -10,6 +10,8 @@ The repository contains the following modules:
 * Assignment 2: [K-Nearest Neighbors](02_nearest_neighbours/README.md)
 * Assignment 3: [Sequential Estimation](03_sequential_estimation/README.md)
 * Assignment 4: [Classification Based on Probability](04_classification/README.md)
+* Assignment 5: [The Back-propagation Algorithm](05_backprop/README.md)
+* Assignment 6: [Applying Neural Networks](06_neural_networks/README.md)
 
 We will add modules gradually throughout the course.
 
