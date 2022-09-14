@@ -186,5 +186,8 @@ if __name__ == '__main__':
     
     plot_points(features, targets, classes)
     
+    print(np.shape(targets))
+    print(np.shape(train_targets))
+    print(np.shape(test_targets))
 
     

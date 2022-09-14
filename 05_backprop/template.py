@@ -1,9 +1,10 @@
-import re
 from typing import Union
 import numpy as np
 
 from tools import load_iris, split_train_test
 
+import matplotlib.pyplot as plt
+from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 
 def sigmoid(x: float) -> float:
     '''
@@ -154,6 +155,39 @@ def test_nn(
         y_all[j] = y
     return np.argmax(y_all, axis=1)
 
+def confusion_matrix(predictions: np.ndarray, targets: np.ndarray, classes: np.ndarray):
+    # sett upp eins og glaerum
+    # https://en.wikipedia.org/wiki/Confusion_matrix
+    # predicted values eru linur fylkis
+    # actual values eru dalkar fylkis
+    # svo hvert stak i fylki er [predicted, actual]
+    conf_matrix = np.zeros((len(classes), len(classes)))
+    for i in range(len(predictions)):
+        conf_matrix[targets[i], predictions[i]] += 1
+    return conf_matrix
+
+
+def E_total_plot(x,y):
+    plt.plot(x,y, label = "Training error", color='red')
+    plt.xlabel("Iterations")
+    plt.ylabel("Error")
+    plt.grid()
+    plt.gca().yaxis.set_minor_locator(AutoMinorLocator())
+    plt.gca().xaxis.set_minor_locator(AutoMinorLocator())
+    plt.xlim(xmin=0)
+    plt.ylim(ymin=0)
+    plt.show()
+
+def misclassification_rate_plot(x,y):
+    plt.plot(x,y, label = "Misclassification rate", color='blue')
+    plt.xlabel("Iterations")
+    plt.ylabel("Misclassification rate")
+    plt.grid()
+    plt.gca().yaxis.set_minor_locator(AutoMinorLocator())
+    plt.gca().xaxis.set_minor_locator(AutoMinorLocator())
+    plt.xlim(xmin=0)
+    plt.ylim(ymin=0)
+    plt.show()
 
 if __name__ == '__main__':
     ############################## Section 1 ################################
@@ -209,7 +243,7 @@ if __name__ == '__main__':
     ############################## Section 2 ################################
     # section 2.1
     # initialize the random seed to get predictable results
-    np.random.seed(1234)
+    """ np.random.seed(1234)
 
     K = 3  # number of classes
     M = 6
@@ -225,9 +259,35 @@ if __name__ == '__main__':
     print(f'W2tr: {W2tr}')
     print(f'Etotal: {Etotal}')
     print(f'misclassification_rate: {misclassification_rate}')
-    print(f'last_guesses: {last_guesses}')
+    print(f'last_guesses: {last_guesses}') """
     
     # section 2.2
-    guesses = test_nn(test_features, M, K, W1tr, W2tr)
-    print(f'Accuracy: {np.sum(guesses == test_targets)/len(test_targets)}')
+    #guesses = test_nn(test_features, M, K, W1tr, W2tr)
     
+    
+    # section 2.3
+    np.random.seed(1234)
+
+    K = 3  # number of classes
+    M = 6
+    D = train_features.shape[1]
+
+    # Initialize two random weight matrices
+    W1 = 2 * np.random.rand(D + 1, M) - 1
+    W2 = 2 * np.random.rand(M + 1, K) - 1
+    iterations = 500
+    W1tr, W2tr, Etotal, misclassification_rate, last_guesses = train_nn(
+        train_features, train_targets, M, K, W1, W2, iterations, 0.1)
+    
+    guesses = test_nn(test_features, M, K, W1tr, W2tr)
+    # 1.
+    accuracy = np.sum(guesses == test_targets)/len(test_targets)
+    print(f'Accuracy: {accuracy}')
+    # 2.
+    conf_matrix = confusion_matrix(guesses, test_targets, classes)
+    print(conf_matrix)
+    # 3.
+    # plot Etotal aas function of iterations
+    E_total_plot(range(iterations), Etotal)
+    # 4.
+    misclassification_rate_plot(range(iterations), misclassification_rate)
