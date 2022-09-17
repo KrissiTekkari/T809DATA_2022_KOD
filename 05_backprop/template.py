@@ -198,7 +198,7 @@ def plot_this(x,y, title, xlabel, ylabel):
     plt.grid()
     plt.gca().yaxis.set_minor_locator(AutoMinorLocator())
     plt.gca().xaxis.set_minor_locator(AutoMinorLocator())
-    plt.xlim(xmin=0)
+    #plt.xlim(xmin=0)
     #plt.ylim(ymin=0)
     plt.show()
     
@@ -303,8 +303,7 @@ if __name__ == '__main__':
     # 3.
     E_total_plot(range(iterations), Etotal)
     # 4.
-    misclassification_rate_plot(range(iterations), misclassification_rate) """
-    
+    misclassification_rate_plot(range(iterations), misclassification_rate)  """
     # Independent section
 
     # Initialize two random weight matrices
@@ -312,7 +311,8 @@ if __name__ == '__main__':
     D = train_features.shape[1]
     iterations = 500
     K = 3  # number of classes
-    """ iii = 10
+    
+    """ iii = 20
     accuracy_array = np.zeros(iii)
     
     for i in range(1, iii+1):
@@ -330,7 +330,7 @@ if __name__ == '__main__':
     plot_this(range(1, iii+1), accuracy_array,'Accuracy as function of hidden units', 
               'Number of hidden units', 'Accuracy') """
     
-    """ jjj = 10
+    """ jjj = 100
     accuracy_eta_array = np.zeros(jjj)
     eta_array = np.zeros(jjj)
     for i in range(1, jjj+1):
@@ -339,27 +339,27 @@ if __name__ == '__main__':
         W1 = 2 * np.random.rand(D + 1, M) - 1
         W2 = 2 * np.random.rand(M + 1, K) - 1
         W1tr, W2tr, Etotal, misclassification_rate, last_guesses = train_nn(
-            train_features, train_targets, M, K, W1, W2, iterations, 0.1*i)
+            train_features, train_targets, M, K, W1, W2, iterations, (1/jjj)*i)
         guesses = test_nn(test_features, M, K, W1tr, W2tr)
         accuracy = np.sum(guesses == test_targets)/len(test_targets)
         accuracy_eta_array[i-1] = accuracy
-        eta_array[i-1] = 0.1*i
+        eta_array[i-1] = (1/jjj)*i
     plot_this(eta_array, accuracy_eta_array,'Accuracy as function of learning rate', 
               '$\eta$', 'Accuracy') """
     
     kkk = 10
     accuracy_eta_array = np.zeros(kkk)
-    eta_array = np.zeros(kkk)
+    W_array = np.zeros(kkk)
     for i in range(1, kkk+1):
         np.random.seed(1234)
         M = 6
-        W1 = 2 * np.random.rand(D + 1, M) - 1
-        W2 = 2 * np.random.rand(M + 1, K) - 1
+        W1 = (np.zeros((D + 1, M)) - 0.5) + i/10.0
+        W2 = (np.zeros((M + 1, K)) - 0.5)
         W1tr, W2tr, Etotal, misclassification_rate, last_guesses = train_nn(
             train_features, train_targets, M, K, W1, W2, iterations, 0.1*i)
         guesses = test_nn(test_features, M, K, W1tr, W2tr)
         accuracy = np.sum(guesses == test_targets)/len(test_targets)
         accuracy_eta_array[i-1] = accuracy
-        eta_array[i-1] = 0.1*i
-    plot_this(eta_array, accuracy_eta_array,'Accuracy as function of learning rate', 
-              '$\eta$', 'Accuracy')
+        W_array[i-1] = -0.5 + 0.1*i
+    plot_this(W_array, accuracy_eta_array,'Accuracy as function of starting weights', 
+              'Starting weight', 'Accuracy')
