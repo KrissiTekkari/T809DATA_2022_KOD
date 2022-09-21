@@ -134,7 +134,7 @@ def train_nn(
         W2 = W2 - eta*dE2_total/N
         misclassification_rate[i] = np.sum(np.argmax(y_all, axis=1) != np.argmax(t_train, axis=1))/N
 
-    return W1, W2, E_total, misclassification_rate, np.argmax(y_all, axis=1)
+    return W1, W2, E_total/N, misclassification_rate, np.argmax(y_all, axis=1)
 
 
 def test_nn(
@@ -212,9 +212,9 @@ if __name__ == '__main__':
     #print(perceptron(np.array([1.0, 2.3, 1.9]),np.array([0.2,0.3,0.1])))
     #print(perceptron(np.array([0.2,0.4]),np.array([0.1,0.4])))
     # section 1.3
-    features, targets, classes = load_iris()
+    """ features, targets, classes = load_iris()
     (train_features, train_targets), (test_features, test_targets) = \
-    split_train_test(features, targets)
+    split_train_test(features, targets) """
     
     """ # initialize the random generator to get repeatable results
     np.random.seed(1234)
@@ -257,39 +257,47 @@ if __name__ == '__main__':
     ############################## Section 2 ################################
     # section 2.1
     # initialize the random seed to get predictable results
-    """ np.random.seed(1234)
+    """ np.random.seed(911)
+    features, targets, classes = load_iris()
+    (train_features, train_targets), (test_features, test_targets) = \
+    split_train_test(features, targets) """
 
+    """ x = train_features[0, :]
     K = 3  # number of classes
-    M = 6
+    M = 7
     D = train_features.shape[1]
 
     # Initialize two random weight matrices
     W1 = 2 * np.random.rand(D + 1, M) - 1
     W2 = 2 * np.random.rand(M + 1, K) - 1
+    
     W1tr, W2tr, Etotal, misclassification_rate, last_guesses = train_nn(
-        train_features[:20, :], train_targets[:20], M, K, W1, W2, 1000, 0.1)
+        train_features[:20, :], train_targets[:20], M, K, W1, W2, 500, 0.1)
     
     print(f'W1tr: {W1tr}')
     print(f'W2tr: {W2tr}')
     print(f'Etotal: {Etotal}')
     print(f'misclassification_rate: {misclassification_rate}')
-    print(f'last_guesses: {last_guesses}') """
+    print(f'last_guesses: {last_guesses}')
+ """
     
     # section 2.2
     #guesses = test_nn(test_features, M, K, W1tr, W2tr)
     
+    np.random.seed(911)
+    features, targets, classes = load_iris()
+    (train_features, train_targets), (test_features, test_targets) = \
+    split_train_test(features, targets)
     
     # section 2.3
-    """ np.random.seed(1234)
-
     K = 3  # number of classes
-    M = 6
+    M = 7
     D = train_features.shape[1]
 
     # Initialize two random weight matrices
     W1 = 2 * np.random.rand(D + 1, M) - 1
     W2 = 2 * np.random.rand(M + 1, K) - 1
-    iterations = 500
+    iterations = 5000
     W1tr, W2tr, Etotal, misclassification_rate, last_guesses = train_nn(
         train_features, train_targets, M, K, W1, W2, iterations, 0.1)
     
@@ -303,7 +311,7 @@ if __name__ == '__main__':
     # 3.
     E_total_plot(range(iterations), Etotal)
     # 4.
-    misclassification_rate_plot(range(iterations), misclassification_rate)  """
+    misclassification_rate_plot(range(iterations), misclassification_rate) 
     # Independent section
 
     # Initialize two random weight matrices
@@ -347,7 +355,7 @@ if __name__ == '__main__':
     plot_this(eta_array, accuracy_eta_array,'Accuracy as function of learning rate', 
               '$\eta$', 'Accuracy') """
     
-    kkk = 10
+    """  kkk = 10
     accuracy_eta_array = np.zeros(kkk)
     W_array = np.zeros(kkk)
     for i in range(1, kkk+1):
@@ -362,4 +370,4 @@ if __name__ == '__main__':
         accuracy_eta_array[i-1] = accuracy
         W_array[i-1] = -0.5 + 0.1*i
     plot_this(W_array, accuracy_eta_array,'Accuracy as function of starting weights', 
-              'Starting weight', 'Accuracy')
+              'Starting weight', 'Accuracy') """
