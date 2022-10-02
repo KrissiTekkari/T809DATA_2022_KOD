@@ -41,7 +41,7 @@ def mvn_basis(
 def _plot_mvn():
     X, t = load_regression_iris()
     N, D = X.shape
-    print(X[:5, :])
+    #print(X[:5, :])
     M, sigma = 10, 10
     mu = np.zeros((M, D))
     for i in range(D):
@@ -100,7 +100,7 @@ def linear_model(
     return w@mvn_basis(features, mu, sigma).T
 
 
-if __name__ == '__main__':
+""" if __name__ == '__main__':
     X, t = load_regression_iris()
     N, D = X.shape
     print(X[:5, :])
@@ -110,14 +110,17 @@ if __name__ == '__main__':
         mmin = np.min(X[i, :])
         mmax = np.max(X[i, :])
         mu[:, i] = np.linspace(mmin, mmax, M)
+    print(mu)
     fi = mvn_basis(X, mu, sigma)
     #print(fi)
+    #print(np.shape(fi))
     #_plot_mvn()
     lamda = 0.001
     wml = max_likelihood_linreg(fi, t, lamda)
     print(wml)
     prediction = linear_model(X, mu, sigma, wml)
     print(prediction)
+
     # plot actual values and predictions
     plt.plot(t, label='actual')
     plt.plot(prediction, label='prediction')
@@ -133,6 +136,4 @@ if __name__ == '__main__':
     plt.xlabel('pedal length squared diffrence [cm^2]')
     plt.ylabel('pedal length [cm]')
     plt.grid()
-    plt.show()
-    
-    print(np.sqrt(np.mean((t - prediction)**2)))
+    plt.show() """

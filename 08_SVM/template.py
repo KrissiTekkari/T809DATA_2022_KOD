@@ -100,12 +100,13 @@ def train_test_SVM(
     This function should return (accuracy, precision, recall)
     '''
     svc.fit(X_train, t_train)
-    accuracy = accuracy_score(t_test, svc.predict(X_test))
-    precision = precision_score(t_test, svc.predict(X_test))
-    recall = recall_score(t_test, svc.predict(X_test))
+    prediction = svc.predict(X_test)
+    accuracy = accuracy_score(t_test, prediction)
+    precision = precision_score(t_test, prediction)
+    recall = recall_score(t_test, prediction)
     return (accuracy, precision, recall)
 
-if __name__ == '__main__':
+""" if __name__ == '__main__':
     #_plot_linear_kernel()
     #_compare_gamma()
     #_compare_C()
@@ -129,4 +130,4 @@ if __name__ == '__main__':
     print('Sigmoid kernel:    ', sigmoid_kernel)
     print('RBF kernel:        ', rbf_kernel)
     print('Polynomial kernel: ', poly_kernel)
-    
+ """
