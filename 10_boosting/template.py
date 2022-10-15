@@ -13,6 +13,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn import impute
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -76,8 +77,14 @@ def get_better_titanic():
     # replace femal age nan with median of female age
     male_median_age = X_full[X_full.Sex == "male"].Age.median()
     female_median_age = X_full[X_full.Sex == "female"].Age.median()
-    X_full.Age[(X_full.Sex == "male") & (X_full.Age.isna())] = male_median_age 
-    X_full.Age[(X_full.Sex == "female") & (X_full.Age.isna())] = female_median_age 
+    #X_full.Age[(X_full.Sex == "male") & (X_full.Age.isna())] = male_median_age 
+    #X_full.Age[(X_full.Sex == "female") & (X_full.Age.isna())] = female_median_age
+    
+    # import normal distribution from scipy
+    from scipy.stats import norm
+    # normal distribution wi
+    X_full.loc[(X_full.Sex == 'male') & (X_full.Age.isna()), 'Age'] = male_median_age 
+    X_full.loc[(X_full.Sex == 'female') & (X_full.Age.isna()), 'Age'] = female_median_age 
     
 
     # We then use the get_dummies function to transform text
@@ -159,13 +166,16 @@ def _create_submission():
     
 # main function
 if __name__ == '__main__':
-    #(tr_X, tr_y), (tst_X, tst_y), submission_X = get_better_titanic()
+    (tr_X, tr_y), (tst_X, tst_y), submission_X = get_better_titanic()
     
-    #print(tr_X[:10])
+    # plot age distribution of tr_X
+    plt.hist(tr_X.Age, bins=30)
+    plt.show()
+    
     # Load in the raw data
     # check if data directory exists for Mimir submissions
     # DO NOT REMOVE
-    if os.path.exists('./data/train.csv'):
+    """ if os.path.exists('./data/train.csv'):
         train = pd.read_csv('./data/train.csv')
         test = pd.read_csv('./data/test.csv')
     else:
@@ -178,4 +188,7 @@ if __name__ == '__main__':
     
     ff = X_full[:30]
     print(ff)
+    ff.loc[(ff['Sex'] == 'male') & (ff['Age'].isna()), 'Age'] = 100
+    print(ff) """
+
     
