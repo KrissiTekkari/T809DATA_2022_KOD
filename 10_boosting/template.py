@@ -79,10 +79,7 @@ def get_better_titanic():
     female_median_age = X_full[X_full.Sex == "female"].Age.median()
     #X_full.Age[(X_full.Sex == "male") & (X_full.Age.isna())] = male_median_age 
     #X_full.Age[(X_full.Sex == "female") & (X_full.Age.isna())] = female_median_age
-    
-    # import normal distribution from scipy
-    from scipy.stats import norm
-    # normal distribution wi
+
     X_full.loc[(X_full.Sex == 'male') & (X_full.Age.isna()), 'Age'] = male_median_age 
     X_full.loc[(X_full.Sex == 'female') & (X_full.Age.isna()), 'Age'] = female_median_age 
     
@@ -100,7 +97,6 @@ def get_better_titanic():
     y = train.Survived
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=.3, random_state=5, stratify=y)
-    print(X_full[:10])
     return (X_train, y_train), (X_test, y_test), submission_X
 
 
@@ -109,7 +105,13 @@ def rfc_train_test(X_train, t_train, X_test, t_test):
     Train a random forest classifier on (X_train, t_train)
     and evaluate it on (X_test, t_test)
     '''
-    ...
+    clf = RandomForestClassifier()
+    clf.fit(X_train, t_train)
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(t_test, y_pred)
+    precision = precision_score(t_test, y_pred)
+    recall = recall_score(t_test, y_pred)
+    return (accuracy, precision, recall)
 
 
 def gb_train_test(X_train, t_train, X_test, t_test):
@@ -117,7 +119,13 @@ def gb_train_test(X_train, t_train, X_test, t_test):
     Train a Gradient boosting classifier on (X_train, t_train)
     and evaluate it on (X_test, t_test)
     '''
-    ...
+    clf = GradientBoostingClassifier()
+    clf.fit(X_train, t_train)
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(t_test, y_pred)
+    precision = precision_score(t_test, y_pred)
+    recall = recall_score(t_test, y_pred)
+    return (accuracy, precision, recall)
 
 
 def param_search(X, y):
@@ -127,9 +135,9 @@ def param_search(X, y):
     '''
     # Create the parameter grid
     gb_param_grid = {
-        'n_estimators': [...],
-        'max_depth': [...],
-        'learning_rate': [...]}
+        'n_estimators': list(range(1,100,1)),
+        'max_depth': list(range(1,50,1)),
+        'learning_rate': list(np.linspace(0.001, 1, 1000))}
     # Instantiate the regressor
     gb = GradientBoostingClassifier()
     # Perform random search
@@ -143,6 +151,8 @@ def param_search(X, y):
     # Fit randomized_mse to the data
     gb_random.fit(X, y)
     # Print the best parameters and lowest RMSE
+    print("Best parameters found: ", gb_random.best_params_)
+    print("Lowest RMSE found: ", np.sqrt(np.abs(gb_random.best_score_)))
     return gb_random.best_params_
 
 
@@ -152,7 +162,13 @@ def gb_optimized_train_test(X_train, t_train, X_test, t_test):
     and evaluate it on (X_test, t_test) with
     your own optimized parameters
     '''
-    ...
+    clf = GradientBoostingClassifier(n_estimators=	4, max_depth = 5, learning_rate=0.524)
+    clf.fit(X_train, t_train)
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(t_test, y_pred)
+    precision = precision_score(t_test, y_pred)
+    recall = recall_score(t_test, y_pred)
+    return (accuracy, precision, recall)
 
 
 def _create_submission():
@@ -167,10 +183,30 @@ def _create_submission():
 # main function
 if __name__ == '__main__':
     (tr_X, tr_y), (tst_X, tst_y), submission_X = get_better_titanic()
+
+    # section 2.2!!!!!!!
+    print(rfc_train_test(tr_X, tr_y, tst_X, tst_y))
+
+    # list with values from 1 to 50
     
+    # section 2.4!!!!!!!
+    print(gb_train_test(tr_X, tr_y, tst_X, tst_y))
+
+    # section 2.5!!!!!!!
+    #
+    print(param_search(tr_X, tr_y))
+    #print(list(np.linspace(0.01, 1, 100)))
+
+    # section 2.6!!!!!!!
+    print(gb_optimized_train_test(tr_X, tr_y, tst_X, tst_y))
+
+
+    # list from 0.01 to 1
+    #t = np.linspace(0.01, 1, 100)
+
     # plot age distribution of tr_X
-    plt.hist(tr_X.Age, bins=30)
-    plt.show()
+    #plt.hist(tr_X.Age, bins=30)
+    #plt.show()
     
     # Load in the raw data
     # check if data directory exists for Mimir submissions
