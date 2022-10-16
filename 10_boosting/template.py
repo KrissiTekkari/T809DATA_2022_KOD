@@ -174,31 +174,86 @@ def gb_optimized_train_test(X_train, t_train, X_test, t_test):
 def _create_submission():
     '''Create your kaggle submission
     '''
-    ...
-    prediction = ...
+    # create kaggle submission
+    (X_train, y_train), (X_test, y_test), submission_X = get_better_titanic()
+    clf = GradientBoostingClassifier(n_estimators=	4, max_depth = 5, learning_rate=0.524)
+    clf.fit(X_train, y_train)
+    prediction = clf.predict(submission_X)
     build_kaggle_submission(prediction)
     
     
     
+################# INDEPENDENT SECTION #################
+    
+def param_search_indep(X, y):
+    '''
+    Perform randomized parameter search on the
+    gradient boosting classifier on the dataset (X, y)
+    '''
+    from scipy.stats import uniform
+    learning_rate_distribution = uniform(loc=0, scale=1)
+    # Create the parameter grid
+    gb_param_grid = {
+        'n_estimators': list(range(1,1000,1)),
+        'max_depth': list(range(1,100,1)),
+        'learning_rate': learning_rate_distribution,
+        'max_features': list(range(1,16,1))}
+    # Instantiate the regressor
+    gb = GradientBoostingClassifier()
+    # Perform random search
+    gb_random = RandomizedSearchCV(
+        param_distributions=gb_param_grid,
+        estimator=gb,
+        scoring="accuracy",
+        verbose=0,
+        n_iter=1000,
+        cv=None)
+    # Fit randomized_mse to the data
+    gb_random.fit(X, y)
+    # Print the best parameters and lowest RMSE
+    print("Best parameters found: ", gb_random.best_params_)
+    print("Lowest RMSE found: ", np.sqrt(np.abs(gb_random.best_score_)))
+    return gb_random.best_params_
+
+def gp_opt_indep(X_train, t_train, X_test, t_test):
+    '''
+    Train a gradient boosting classifier on (X_train, t_train)
+    and evaluate it on (X_test, t_test) with
+    your own optimized parameters
+    '''
+    #clf = GradientBoostingClassifier(n_estimators=	74, max_features=6 ,max_depth = 5, learning_rate=0.07884937591583496)
+    clf = GradientBoostingClassifier(n_estimators=	906, max_features=11 ,max_depth = 2, learning_rate=0.017316576051416455)
+    clf.fit(X_train, t_train)
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(t_test, y_pred)
+    precision = precision_score(t_test, y_pred)
+    recall = recall_score(t_test, y_pred)
+    return (accuracy, precision, recall)
+    
 # main function
 if __name__ == '__main__':
     (tr_X, tr_y), (tst_X, tst_y), submission_X = get_better_titanic()
-
+    
     # section 2.2!!!!!!!
-    print(rfc_train_test(tr_X, tr_y, tst_X, tst_y))
+    #print(rfc_train_test(tr_X, tr_y, tst_X, tst_y))
 
     # list with values from 1 to 50
     
     # section 2.4!!!!!!!
-    print(gb_train_test(tr_X, tr_y, tst_X, tst_y))
+    #print(gb_train_test(tr_X, tr_y, tst_X, tst_y))
 
     # section 2.5!!!!!!!
     #
-    print(param_search(tr_X, tr_y))
+    #print(param_search(tr_X, tr_y))
     #print(list(np.linspace(0.01, 1, 100)))
 
     # section 2.6!!!!!!!
-    print(gb_optimized_train_test(tr_X, tr_y, tst_X, tst_y))
+    #print(gb_optimized_train_test(tr_X, tr_y, tst_X, tst_y))
+    
+    #_create_submission()
+    
+    #param_search_grid(tr_X, tr_y)
+    #print(gp_opt_indep(tr_X, tr_y, tst_X, tst_y))
 
 
     # list from 0.01 to 1
@@ -227,4 +282,15 @@ if __name__ == '__main__':
     ff.loc[(ff['Sex'] == 'male') & (ff['Age'].isna()), 'Age'] = 100
     print(ff) """
 
+    # independent section
     
+    """ from scipy.stats import uniform
+    distt = uniform(loc=0, scale=1)
+    # sample from the distribution
+    # and make a histogram
+    samp = distt.rvs(1000)
+    print(samp)
+    plt.hist(samp, bins=100)
+    plt.show() """
+    #print(param_search_indep(tr_X, tr_y))
+    print(gp_opt_indep(tr_X, tr_y, tst_X, tst_y))
