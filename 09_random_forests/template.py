@@ -215,7 +215,6 @@ def _plot_extreme_oob_error():
     plt.show()
 
 
-
 class CancerClassifier_indep:
     '''
     A general class to try out different sklearn classifiers
@@ -306,8 +305,6 @@ class CancerClassifier_indep:
         plt.gca().spines['top'].set_visible(False)
         plt.show()
         return sorted_indices
-
-
 
 
 # main function
