@@ -51,6 +51,7 @@ class IrisDataSet(Dataset):
         # * Class labels should be of type long
         self.features = torch.from_numpy(features).float()
         self.targets = torch.from_numpy(targets)
+        
 
     def __len__(self):
         '''We always have to define this method
@@ -100,6 +101,8 @@ def train_simple_model():
     # we will do 50 epochs (i.e. we will train on all data 50 times)
     for epoch in range(50):
         for (feature, target) in dl:
+            feature = feature.type(torch.FloatTensor)
+            target = target.type(torch.LongTensor)
             num_steps += 1
             # We have to do the following before each
             # forward pass to clear the gradients that
@@ -111,6 +114,8 @@ def train_simple_model():
             # for sample i.
             out = model(feature)
             # Calculate the loss for the current batch
+            print(out)
+            print(target)
             loss = loss_metric(out, target)
             # To perform the backward propagation we do:
             loss.backward()
@@ -125,4 +130,6 @@ def train_simple_model():
 
 
 if __name__ == '__main__':
+    #features, targets, classes = load_iris()
+    #print(classes)
     train_simple_model()
