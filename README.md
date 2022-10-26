@@ -14,6 +14,10 @@ The repository contains the following modules:
 * Assignment 6: [Applying Neural Networks](06_neural_networks/README.md)
 * Assignment 7: [Linear Models For Regression](07_linear_models/README.md)
 * Assignment 8: [Support Vector Machines](08_SVM/README.md)
+* Assignment 9: [Random Forests](09_random_forests/README.md)
+* Assignment 10: [Boosting](010_boosting/README.md)
+* Assignment 11: [K-Means and Gaussian Mixtures](011_k_means/README.md)
+* Assignment 12: [Principal Component Analysis](012_PCA/README.md)
 
 
 We will add modules gradually throughout the course.
