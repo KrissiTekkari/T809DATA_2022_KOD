@@ -190,38 +190,22 @@ def k_means_predict(
     * the predictions (list)
     '''
     _, R, _= k_means(X, len(classes), num_its)
-    # determine which cluster is most common for each class label
     clusters = []
-    print(R)
     for i in range(len(classes)):
-        # find the cluster with the most samples of class i
-        # and assign that cluster to class i
         check = np.argmax(R[t == classes[i], :], axis=1)
-        # count the number of times each cluster is assigned to class i
         count = np.bincount(check)
-        # get the cluster with the most samples of class i
-        print(count)
         cluster = np.argmax(count)
         clusters.append(cluster)
-    print(clusters)
-    # determine the predictions
-    predictions = np.argmax(R, axis=1)
-    for i in range(len(classes)):
-        predictions[predictions == clusters[i]] = classes[i]
-    return list(predictions)
-    
-    
-    
-    
-    
-    
+
+    predictions = []
+    for i in range(np.shape(R)[0]):
+        predictions.append(classes[clusters[np.argmax(R[i, :])]])
+    return predictions
 
 
 def _iris_kmeans_accuracy():
     X, y, c = load_iris()
     prediction = k_means_predict(X, y, c, 5)
-    print(prediction)
-    print(y)
     acc = accuracy_score(y, prediction)
     conf_matrix = sk.metrics.confusion_matrix(y, prediction)
     print('Accuracy: {}'.format(acc))
@@ -229,7 +213,8 @@ def _iris_kmeans_accuracy():
     print(conf_matrix)
 
 def _my_kmeans_on_image():
-    ...
+    image, (w, h) = image_to_numpy()
+    k_means(image, 7, 5)
 
 
 def plot_image_clusters(n_clusters: int):
@@ -237,21 +222,39 @@ def plot_image_clusters(n_clusters: int):
     Plot the clusters found using sklearn k-means.
     '''
     image, (w, h) = image_to_numpy()
-    ...
-    plt.subplot('121')
+    kmeans = KMeans(n_clusters=n_clusters)
+    kmeans.fit(image)
+    plt.subplot(121)
     plt.imshow(image.reshape(w, h, 3))
-    plt.subplot('122')
+    plt.subplot(122)
     # uncomment the following line to run
-    # plt.imshow(kmeans.labels_.reshape(w, h), cmap="plasma")
+    plt.imshow(kmeans.labels_.reshape(w, h), cmap="plasma")
     plt.show()
 
 
 def _gmm_info():
-    ...
+    X, y, c = load_iris()
+    gauss = GaussianMixture(n_components=3)
+    # fit the model
+    gauss.fit(X)
+    print('Mixing coefficients:')
+    print(gauss.weights_)
+    print('Mean vectors:')
+    print(gauss.means_)
+    print('Covariance matrices:')
+    print(gauss.covariances_)
+    
 
 
 def _plot_gmm():
-    ...
+    X, y, c = load_iris()
+    gauss = GaussianMixture(n_components=3)
+    # fit the model
+    gauss.fit(X)
+    # make predictions
+    predictions = gauss.predict(X)
+    plot_gmm_results(X, predictions, gauss.means_, gauss.covariances_)
+    
 
 if __name__ == '__main__':
     """ a = np.array([
@@ -297,4 +300,11 @@ if __name__ == '__main__':
     #X, y, c = load_iris()
     #predict = k_means_predict(X, y, c, 5)
     #print(predict)
-    _iris_kmeans_accuracy()
+    #_iris_kmeans_accuracy()
+    """ num_clusters = [2,5,10,20]
+    for i in range(len(num_clusters)):
+        plot_image_clusters(num_clusters[i]) """
+    #_gmm_info()
+    _plot_gmm()
+
+        
