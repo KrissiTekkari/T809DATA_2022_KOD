@@ -143,7 +143,6 @@ def indep_plot_first_2():
     X, y = load_cancer()
     X_hat = standardize(X)
     pca.fit_transform(X_hat)
-    # project data onto first 2 principal components
     X_hat_pca = pca.transform(X_hat)
     # malignant = 0, benign = 1
     plt.scatter(X_hat_pca[y==0, 0], X_hat_pca[y==0, 1], color='red', marker='x')
@@ -159,7 +158,6 @@ def indep_plot_first_3():
     X, y = load_cancer()
     X_hat = standardize(X)
     pca.fit_transform(X_hat)
-    # project data onto first 3 principal components
     X_hat_pca = pca.transform(X_hat)
     # malignant = 0, benign = 1
     fig = plt.figure()

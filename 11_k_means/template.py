@@ -254,7 +254,18 @@ def _plot_gmm():
     # make predictions
     predictions = gauss.predict(X)
     plot_gmm_results(X, predictions, gauss.means_, gauss.covariances_)
-    
+
+
+def indep_plot_image_clusters(n_clusters: list, img: str):
+    image, (w, h) = image_to_numpy(path = img)
+    for i in range(len(n_clusters)):
+        kmeans = KMeans(n_clusters=n_clusters[i])
+        kmeans.fit(image)
+        plt.subplot(2, 2, i+1)
+        plt.imshow(kmeans.labels_.reshape(w, h), cmap="plasma")
+        plt.title("k = {}".format(n_clusters[i]))
+    plt.show()
+
 
 if __name__ == '__main__':
     """ a = np.array([
@@ -305,6 +316,9 @@ if __name__ == '__main__':
     for i in range(len(num_clusters)):
         plot_image_clusters(num_clusters[i]) """
     #_gmm_info()
-    _plot_gmm()
+    #_plot_gmm()
+    #indep_plot_image_clusters([30,40,50,60], './images/rainbow.jpg')
+    #indep_plot_image_clusters([30,40,50,60], './images/jupiter.jpg')
+    #indep_plot_image_clusters([10,15,20,25], './images/galaxy.jpg')
 
         
